@@ -1,4 +1,4 @@
-# page2md
+# cf-page-to-md
 
 Cloudflare Browser Rendering の Markdown endpoint を使って、Webページを Markdown に変換する CLI ツールです。
 非公式ツールであり、Cloudflare とは提携・承認関係にありません。
