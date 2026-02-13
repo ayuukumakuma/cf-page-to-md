@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-14
+    env:
+      BINARY_NAME: page2md
+      TARGET: aarch64-apple-darwin
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin
+
+      - name: Restore Rust cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build release binary
+        run: cargo build --release --target "${TARGET}"
+
+      - name: Package binary
+        run: |
+          set -eu
+          mkdir -p dist
+          cp "target/${TARGET}/release/${BINARY_NAME}" "dist/${BINARY_NAME}"
+          tar -C dist -czf "dist/${BINARY_NAME}-${GITHUB_REF_NAME}-${TARGET}.tar.gz" "${BINARY_NAME}"
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-asset
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download archive
+        uses: actions/download-artifact@v4
+        with:
+          name: release-asset
+          path: dist
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          overwrite_files: true
+          files: |
+            dist/*.tar.gz

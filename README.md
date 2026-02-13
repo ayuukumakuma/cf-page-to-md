@@ -11,6 +11,32 @@ This is an unofficial tool and is not affiliated with or endorsed by Cloudflare.
 - `CF_ACCOUNT_ID`: Cloudflare アカウント ID
 - `CF_API_TOKEN`: Browser Rendering を利用できる API トークン
 
+## インストール (macOS / Apple Silicon)
+
+最新版をワンライナーでインストール:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ayuukumakuma/cf-page-to-md/main/scripts/install.sh | sh
+```
+
+バージョンを固定してインストール:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ayuukumakuma/cf-page-to-md/main/scripts/install.sh | VERSION=v0.1.0 sh
+```
+
+インストール先を変更してインストール:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ayuukumakuma/cf-page-to-md/main/scripts/install.sh | INSTALL_DIR="$HOME/bin" sh
+```
+
+アンインストール:
+
+```bash
+rm -f ~/.local/bin/page2md
+```
+
 ## 使い方
 
 ```bash
